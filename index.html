@@ -64,6 +64,7 @@ input.f,select.f{width:100%;padding:12px;border:1.5px solid var(--ln);border-rad
 .btn.g{background:var(--ln);color:var(--ink);flex:.5}.btn.d{background:#c92a2a22;color:var(--rd);flex:.5}
 .pos{color:var(--gr)}.neg{color:var(--rd)}
 .col{display:flex;align-items:flex-end;gap:3px;height:90px}.col i{flex:1;background:var(--or);border-radius:4px 4px 0 0;min-height:2px}
+.mini{border:1px solid var(--ln);background:var(--card);color:var(--ink);border-radius:20px;padding:4px 10px;font:600 12px system-ui;text-decoration:none}.mini.ok{background:#2f9e4430;color:var(--gr);border-color:transparent}
 </style></head><body>
 <div id="sp"><img src="dona-selma.jpg" alt=""><div>Marmotas Caseiras 🥨</div></div>
 <header><div class="sign"><div class="t1">MARMOTAS</div><div class="t2">CASEIRAS</div><div class="t3">DA DONA SELMA</div></div><img class="dona" src="dona-selma.jpg" alt="Dona Selma" onerror="this.style.display='none'"><button id="inst">📲 Instalar o app no celular</button><small>Feitas com carinho e aquele gostinho de casa</small></header>
@@ -92,55 +93,15 @@ function render(){
  if(tab=='fin'){document.body.insertAdjacentHTML('beforeend','<button class="fab" onclick="finSheet()">＋ Lançar</button>')}
  if(tab=='cli'){document.body.insertAdjacentHTML('beforeend','<button class="fab" onclick="cliSheet()">＋ Novo cliente</button>')}
 }
-function hoje(){
- const v=S.sales.filter(s=>s.date==date),made=S.days[date]?.made||0,pd=v.filter(s=>s.paid);
- const din=sum(pd.filter(s=>s.pay=='din'),s=>s.value),pix=sum(pd.filter(s=>s.pay=='pix'),s=>s.value);
- const fia=sum(v.filter(s=>!s.paid),s=>s.value),qt=sum(v,s=>+s.qty);
- const pct=made?Math.min(100,qt/made*100):0;
- return nav()+`<div class="card"><div class="made"><div><h2 style="font-size:20px">Marmotas feitas</h2><small style="color:var(--mut)">${qt} vendidas · sobraram ${made-qt}</small></div>
- <div class="step"><button onclick="mk(-10)">−</button><input type="number" inputmode="numeric" value="${made}" onchange="mkSet(this.value)"><button onclick="mk(10)">+</button></div></div>
- <div class="bar"><i style="width:${pct}%"></i></div>${made&&qt>=made?'<div style="margin-top:8px;font-weight:700;color:var(--or)">🎉 Esgotou! Vendeu tudo hoje!</div>':''}</div>
- <div class="grid"><div class="stat s1"><small>💵 Dinheiro</small><div class="big">${R(din)}</div></div>
- <div class="stat s2"><small>📱 Pix</small><div class="big">${R(pix)}</div></div>
- <div class="stat s3"><small>⏳ A receber</small><div class="big">${R(fia)}</div></div>
- <div class="stat s4"><small>🥨 Vendidas</small><div class="big">${qt}</div></div></div>
- <button class="btn" style="width:100%;margin-bottom:14px;background:#25a244" onclick="wpp()">📲 Enviar resumo do dia no WhatsApp</button><h2 style="margin:6px 2px 8px">Entregas e vendas</h2>`+
- (v.length?v.map(s=>`<div class="sale ${s.paid?'':'no'}"><div class="i" onclick="saleSheet(${s.id})"><b>${esc(s.client||'Cliente')}</b><small>${s.qty} un. · ${s.pay=='pix'?'📱 Pix':'💵 Dinheiro'}${s.delivery?' · 🛵 entrega':''}</small></div>
- <div class="v">${R(s.value)}<br><button class="tag" onclick="pay(${s.id})">${s.paid?'✔ Pago':'Pendente'}</button></div></div>`).join(''):'<div class="empty">Nenhuma venda neste dia.<br>Toque em “Nova venda” 👇</div>');
-}
 function mk(n){S.days[date]={made:Math.max(0,(S.days[date]?.made||0)+n)};save();render()}
 function mkSet(v){S.days[date]={made:Math.max(0,+v||0)};save();render()}
-function pay(id){const s=S.sales.find(x=>x.id==id);s.paid=!s.paid;save();render()}
-function saleSheet(id){
- const s=id?S.sales.find(x=>x.id==id):{client:'',qty:10,delivery:false,pay:'pix',paid:true,value:7};
- F={id:id||0,qty:s.qty,delivery:s.delivery,pay:s.pay,paid:s.paid};
- $('#sheet').innerHTML=`<div><h2>${id?'Editar venda':'Nova venda'}</h2>
- <label>Cliente</label><input class="f" id="c" list="cl" value="${esc(s.client)}" placeholder="Nome de quem comprou"><datalist id="cl">${[...new Set(S.sales.map(x=>x.client).concat((S.clients||[]).map(c=>c.name)).filter(Boolean))].map(n=>`<option value="${esc(n)}">`).join('')}</datalist>
- <label>💰 Cliente quer por valor? (R$)</label><div class="chips" style="margin-bottom:6px">${[5,10,15,20,30,50].map(n=>`<button class="chip" onclick="$('#bv').value=${n};byVal(${n})">R$ ${n}</button>`).join('')}</div><input class="f" id="bv" type="number" step="0.01" inputmode="decimal" placeholder="Outro valor, ex.: 12" oninput="byVal(this.value)"><small id="bh" style="color:var(--or);font-weight:700"></small>
- <label>Quantidade de marmotas</label><div class="chips" id="qc">${[10,20,30,40,50,60,70,80,90,100,150,200].map(n=>`<button class="chip ${n==F.qty?'on':''}" onclick="setQ(${n})">${n}</button>`).join('')}</div>
- <input class="f" id="q" type="number" inputmode="numeric" value="${s.qty}" oninput="F.qty=+this.value||0;clrBv();upd()" style="margin-top:6px">
- <label>Entrega</label><div class="seg"><button class="chip ${F.delivery?'':'on'}" id="d0" onclick="setD(0)">Retirada</button><button class="chip ${F.delivery?'on':''}" id="d1" onclick="setD(1)">🛵 Entrega +R$ 3</button></div>
- <label>Forma de pagamento</label><div class="seg"><button class="chip ${F.pay=='din'?'on':''}" id="p0" onclick="setP('din')">💵 Dinheiro</button><button class="chip ${F.pay=='pix'?'on':''}" id="p1" onclick="setP('pix')">📱 Pix</button></div>
- <label>Valor (R$)</label><input class="f" id="v" type="number" step="0.01" inputmode="decimal" value="${s.value}">
- <label>Situação</label><div class="seg"><button class="chip ${F.paid?'on':''}" id="k1" onclick="setK(1)">✔ Já pagou</button><button class="chip ${F.paid?'':'on'}" id="k0" onclick="setK(0)">⏳ Vai pagar depois</button></div>
- <div class="row">${id?'<button class="btn d" onclick="delSale()">Excluir</button>':''}<button class="btn g" onclick="closeS()">Voltar</button><button class="btn" onclick="saveSale()">Salvar</button></div></div>`;
- $('#sheet').classList.add('on');
-}
 const closeS=()=>$('#sheet').classList.remove('on');
 const tog=(a,b,on)=>{$(a).classList.toggle('on',on);$(b).classList.toggle('on',!on)};
 function upd(){$('#v').value=((F.bv||price(F.qty))+(F.delivery?3:0)).toFixed(2);document.querySelectorAll('#qc .chip').forEach(c=>c.classList.toggle('on',+c.textContent==F.qty))}
 function clrBv(){F.bv=null;const a=$('#bv');if(a)a.value='';const b=$('#bh');if(b)b.textContent=''}
 function byVal(x){x=+x;if(!(x>0)){clrBv();return}F.bv=x;F.qty=x==7?10:x==13?20:Math.floor(x/.6+1e-9);$('#q').value=F.qty;upd();$('#bh').textContent='= '+F.qty+' marmotas'+(x-price(F.qty)>.009?' (sobram '+R(x-price(F.qty))+')':'')}
 function setQ(n){clrBv();F.qty=n;$('#q').value=n;upd()}
-function setD(x){F.delivery=!!x;tog('#d1','#d0',!!x);upd()}
 function setP(p){F.pay=p;tog('#p1','#p0',p=='pix')}
-function setK(x){F.paid=!!x;tog('#k1','#k0',!!x)}
-function saveSale(){
- const o={client:$('#c').value.trim(),qty:F.qty,delivery:F.delivery,pay:F.pay,paid:F.paid,value:+$('#v').value||0};
- if(F.id){Object.assign(S.sales.find(x=>x.id==F.id),o)}else S.sales.push(Object.assign({id:Date.now(),date},o));
- const nm=o.client;S.clients=S.clients||[];if(nm&&!S.clients.some(c=>key(c.name)==key(nm)))S.clients.push({name:nm,phone:'',addr:'',obs:''});
- save();closeS();render();
-}
 function delSale(){if(confirm('Excluir esta venda?')){S.sales=S.sales.filter(x=>x.id!=F.id);save();closeS();render()}}
 function fin(){
  const l=S.fin.filter(f=>f.date==date),g=sum(l.filter(f=>f.type=='ganho'),f=>f.value),d=sum(l.filter(f=>f.type=='gasto'),f=>f.value);
@@ -160,24 +121,9 @@ function finSheet(){
 }
 function saveFin(){const v=+$('#fv').value;if(!v)return;S.fin.push({id:Date.now(),date,type:F.type,desc:$('#fd').value.trim()||(F.type=='gasto'?'Gasto':'Ganho'),value:v});save();closeS();render()}
 function finDel(id){if(confirm('Excluir este lançamento?')){S.fin=S.fin.filter(f=>f.id!=id);save();render()}}
-function resumo(){
- const m=date.slice(0,7),v=S.sales.filter(s=>s.date.startsWith(m)),f=S.fin.filter(x=>x.date.startsWith(m)),pd=v.filter(s=>s.paid);
- const din=sum(pd.filter(s=>s.pay=='din'),s=>s.value),pix=sum(pd.filter(s=>s.pay=='pix'),s=>s.value),fia=sum(v.filter(s=>!s.paid),s=>s.value);
- const g=sum(f.filter(x=>x.type=='ganho'),x=>x.value),d=sum(f.filter(x=>x.type=='gasto'),x=>x.value),saldo=din+pix+g-d;
- const made=sum(Object.keys(S.days).filter(k=>k.startsWith(m)),k=>S.days[k].made),qt=sum(v,s=>+s.qty);
- const n=new Date(+m.slice(0,4),+m.slice(5),0).getDate(),dias=Array.from({length:n},(_,i)=>sum(v.filter(s=>+s.date.slice(8)==i+1),s=>s.value)),mx=Math.max(...dias,1);
- const nome=new Date(m+'-15T12:00').toLocaleDateString('pt-BR',{month:'long',year:'numeric'});
- return nav()+`<h2 style="margin:0 2px 8px">Resumo de ${nome}</h2>
- <div class="card" style="text-align:center;background:linear-gradient(135deg,#5a2d17,#8a4a24);color:#fff3dc"><small>Lucro do mês (recebido + ganhos − gastos)</small><div class="big" style="font-size:34px;color:${saldo<0?'#ff8787':'#ffc93c'}">${R(saldo)}</div></div>
- <div class="grid"><div class="stat s1"><small>💵 Dinheiro</small><div class="big">${R(din)}</div></div><div class="stat s2"><small>📱 Pix</small><div class="big">${R(pix)}</div></div>
- <div class="stat s3"><small>⏳ A receber</small><div class="big">${R(fia)}</div></div><div class="stat s4"><small>🥨 Vendidas / feitas</small><div class="big">${qt} / ${made}</div></div></div>
- <div class="card"><div style="display:flex;justify-content:space-between"><span>⬆ Outros ganhos</span><b class="pos">${R(g)}</b></div><div style="display:flex;justify-content:space-between;margin-top:6px"><span>⬇ Gastos</span><b class="neg">${R(d)}</b></div></div>
- <div class="card"><b>Vendas por dia</b><div class="col" style="margin-top:10px">${dias.map(x=>`<i style="height:${x/mx*100}%"></i>`).join('')}</div></div>${dev()}<div class="row" style="margin-bottom:10px"><button class="btn g" onclick="bk()">💾 Copiar backup</button><button class="btn g" onclick="rs()">♻ Restaurar</button></div>`;
-}
 $('.tabs').innerHTML=[['hoje','🥨','Vendas'],['fin','💰','Gastos'],['cli','👥','Clientes'],['res','📊','Resumo']].map(t=>`<button data-t="${t[0]}" onclick="tab='${t[0]}';render()"><span>${t[1]}</span>${t[2]}</button>`).join('');
 $('#sheet').addEventListener('click',e=>{if(e.target.id=='sheet')closeS()});
 let CQ='',CL=[];const key=n=>(n||'').trim().toLowerCase();
-function stats(){const m={};S.sales.forEach(s=>{const k=key(s.client);if(!k)return;const o=m[k]||(m[k]={name:s.client,tot:0,qty:0,owe:0,last:'',n:0});o.tot+=s.value;o.qty+=+s.qty;o.n++;if(!s.paid)o.owe+=s.value;if(s.date>o.last)o.last=s.date});return m}
 function cli(){return `<h2 style="margin:14px 2px 8px">👥 Clientes</h2><input class="f" placeholder="🔍 Buscar cliente" value="${esc(CQ)}" oninput="CQ=this.value;$('#cl2').innerHTML=clist()" style="margin-bottom:10px"><div id="cl2">${clist()}</div>`}
 function clist(){const st=stats(),all={};(S.clients||[]).forEach(c=>all[key(c.name)]=Object.assign({tot:0,qty:0,owe:0,last:'',n:0},st[key(c.name)],c));Object.keys(st).forEach(k=>{if(!all[k])all[k]=st[k]});
 CL=Object.values(all).filter(c=>key(c.name).includes(key(CQ))).sort((a,b)=>b.tot-a.tot);
@@ -198,13 +144,116 @@ S.clients=S.clients.filter(c=>key(c.name)!=F.k&&key(c.name)!=key(n));
 S.clients.push({name:n,phone:$('#cp').value.trim(),addr:$('#ca').value.trim(),obs:$('#co').value.trim()});save();closeS();render()}
 function cliDel(){if(confirm('Apagar telefone, endereço e observações deste cliente? As vendas continuam salvas.')){S.clients=(S.clients||[]).filter(c=>key(c.name)!=F.k);save();closeS();render()}}
 function cobrar(){const ph=$('#cp').value.replace(/\D/g,''),t=`Olá, ${$('#cn').value.trim()}! Passando para lembrar do pagamento das marmotas da Dona Selma: ${R(F.owe)}. Pode ser por Pix ou dinheiro. Obrigada! 🥨`;window.open('https://wa.me/'+(ph?(ph.length<=11?'55':'')+ph:'')+'?text='+encodeURIComponent(t),'_blank')}
-function wpp(){const v=S.sales.filter(s=>s.date==date),p=v.filter(s=>s.paid),made=S.days[date]?.made||0,qt=sum(v,s=>+s.qty);
-const t=`🥨 *Marmotas da Dona Selma*\n📅 ${label()}\n\nFeitas: ${made}\nVendidas: ${qt}\nSobraram: ${made-qt}\n\n💵 Dinheiro: ${R(sum(p.filter(s=>s.pay=='din'),s=>s.value))}\n📱 Pix: ${R(sum(p.filter(s=>s.pay=='pix'),s=>s.value))}\n⏳ A receber: ${R(sum(v.filter(s=>!s.paid),s=>s.value))}`;
-window.open('https://wa.me/?text='+encodeURIComponent(t),'_blank')}
-function dev(){const o={};S.sales.filter(s=>!s.paid).forEach(s=>{const k=s.client||'Sem nome';o[k]=(o[k]||0)+s.value});const e=Object.entries(o).sort((a,b)=>b[1]-a[1]);
-return `<div class="card"><b>⏳ Quem ainda deve</b>`+(e.length?e.map(([k,v])=>`<div style="display:flex;justify-content:space-between;margin-top:8px"><span>${esc(k)}</span><b class="neg">${R(v)}</b></div>`).join(''):'<div class="empty" style="padding:10px">Ninguém devendo 🎉</div>')+`</div>`}
 function bk(){const t=JSON.stringify(S);(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>alert('Backup copiado! Cole numa conversa ou nota para guardar.')).catch(()=>prompt('Copie o backup:',t))}
 function rs(){const t=prompt('Cole aqui o backup:');if(!t)return;try{const o=JSON.parse(t);if(!o.sales||!o.fin)throw 0;S=o;save();render();alert('Backup restaurado!')}catch(e){alert('Backup inválido.')}}
+
+let VF='all';
+const rec=s=>s.paid?s.value:Math.min(+s.rec||0,s.value),owe=s=>Math.max(0,s.value-rec(s));
+const ph=s=>((S.clients||[]).find(c=>key(c.name)==key(s.client))||{}).phone||'';
+const DN=['domingo','segunda','terça','quarta','quinta','sexta','sábado'];
+const wk0=d=>{const x=new Date(d+'T12:00');x.setDate(x.getDate()-(x.getDay()+6)%7);return x};
+const addD=(x,n)=>{const y=new Date(x);y.setDate(y.getDate()+n);return y};
+const rw=(a,b,c='')=>`<div style="display:flex;justify-content:space-between;margin-top:6px"><span>${a}</span><b class="${c}">${b}</b></div>`;
+const ent=s=>`<div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap">${s.end?`<a class="mini" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.end+' Pilão Arcado BA')}">📍 Mapa</a>`:''}${ph(s)?`<a class="mini" href="tel:${ph(s).replace(/\D/g,'')}">📞 Ligar</a>`:''}<button class="mini ${s.entregue?'ok':''}" onclick="entregue(${s.id})">${s.entregue?'✔ Entregue':'Marcar entregue'}</button></div>`;
+function vespera(){const a=iso(new Date()),b=iso(addD(new Date(),1)),f=d=>S.sales.filter(s=>s.enc&&!s.entregue&&s.date==d);
+const bx=(l,x)=>x.length?`<div class="card" style="border-color:var(--or)">📦 <b>${l}:</b> ${x.length} encomenda${x.length>1?'s':''} · ${sum(x,s=>+s.qty)} marmotas<br><small style="color:var(--mut)">${x.map(s=>esc(s.client||'Cliente')).join(', ')}</small></div>`:'';
+return bx('Hoje',f(a))+bx('Amanhã',f(b))}
+function saleCard(s,showDate){const f=owe(s),st=s.paid?'✔ Pago':rec(s)>0?'Falta '+R(f):'Pendente';
+return `<div class="sale ${s.paid?'':'no'}"><div class="i"><div onclick="saleSheet(${s.id})"><b>${s.enc?'📦 ':''}${esc(s.client||'Cliente')}</b><small>${showDate?s.date.split('-').reverse().slice(0,2).join('/')+' · ':''}${s.qty} un. · ${s.pay=='pix'?'📱 Pix':'💵 Dinheiro'}${s.delivery?' · 🛵':''}</small>${s.delivery&&s.end?`<small>📍 ${esc(s.end)}</small>`:''}</div>${s.delivery?ent(s):''}</div><div class="v">${R(s.value)}<br><button class="tag" onclick="paySheet(${s.id})">${st}</button></div></div>`}
+function hoje(){
+ const v=S.sales.filter(s=>s.date==date),made=S.days[date]?.made||0,t=dayTot(),pct=made?Math.min(100,t.qt/made*100):0,nd=v.filter(s=>s.delivery);
+ const L=VF=='ent'?nd:VF=='enc'?S.sales.filter(s=>s.enc&&!s.entregue&&s.date>=iso(new Date())).sort((a,b)=>a.date<b.date?-1:1):v;
+ return nav()+vespera()+`<div class="card"><div class="made"><div><h2 style="font-size:20px">Marmotas feitas</h2><small style="color:var(--mut)">${t.qt} vendidas · sobraram ${made-t.qt}</small></div>
+ <div class="step"><button onclick="mk(-10)">−</button><input type="number" inputmode="numeric" value="${made}" onchange="mkSet(this.value)"><button onclick="mk(10)">+</button></div></div>
+ <div class="bar"><i style="width:${pct}%"></i></div>${made&&t.qt>=made?'<div style="margin-top:8px;font-weight:700;color:var(--or)">🎉 Esgotou! Vendeu tudo hoje!</div>':''}</div>
+ <div class="grid"><div class="stat s1"><small>💵 Dinheiro</small><div class="big">${R(t.din)}</div></div><div class="stat s2"><small>📱 Pix</small><div class="big">${R(t.pix)}</div></div>
+ <div class="stat s3"><small>⏳ A receber</small><div class="big">${R(t.fia)}</div></div><div class="stat s4"><small>🥨 Vendidas</small><div class="big">${t.qt}</div></div></div>
+ <div class="row" style="margin:0 0 14px"><button class="btn" style="background:#25a244" onclick="wpp()">📲 Resumo em texto</button><button class="btn" style="background:#8a4a24" onclick="fecharImg()">🖼 Em imagem</button></div>
+ <div class="chips" style="margin-bottom:10px">${[['all','Todas'],['ent','🛵 Entregas ('+nd.length+')'],['enc','📦 Encomendas']].map(([k,l])=>`<button class="chip ${VF==k?'on':''}" onclick="VF='${k}';render()">${l}</button>`).join('')}</div>`+
+ (L.length?L.map(s=>saleCard(s,VF=='enc')).join(''):'<div class="empty">Nada por aqui.<br>Toque em “Nova venda” 👇</div>');
+}
+function entregue(id){const s=S.sales.find(x=>x.id==id);s.entregue=!s.entregue;save();render()}
+function paySheet(id){const s=S.sales.find(x=>x.id==id),f=owe(s);F={id};
+$('#sheet').innerHTML=`<div><h2>Pagamento · ${esc(s.client||'Cliente')}</h2><div class="card" style="margin-top:12px">${rw('Total',R(s.value))}${rw('Já recebido',R(rec(s)),'pos')}${rw('Falta',R(f),'neg')}</div>
+${f?`<label>Valor recebido agora (R$)</label><input class="f" id="pv" type="number" step="0.01" inputmode="decimal" value="${f.toFixed(2)}"><div class="row"><button class="btn g" onclick="closeS()">Voltar</button><button class="btn" onclick="doPay(1)">Receber</button></div>`:'<div class="row"><button class="btn g" onclick="closeS()">Voltar</button></div>'}
+${rec(s)?'<button class="btn d" style="width:100%;margin-top:10px" onclick="doPay(0)">Zerar pagamentos</button>':''}</div>`;$('#sheet').classList.add('on')}
+function doPay(m){const s=S.sales.find(x=>x.id==F.id);if(m){s.rec=Math.min(s.value,rec(s)+(+$('#pv').value||0));if(s.rec>=s.value-.005){s.paid=true;s.rec=0}}else{s.paid=false;s.rec=0}save();closeS();render()}
+function saleSheet(id){
+ const s=id?S.sales.find(x=>x.id==id):{client:'',qty:10,delivery:false,pay:'pix',paid:true,value:7,end:'',enc:false,rec:0,date};
+ F={id:id||0,qty:s.qty,delivery:!!s.delivery,pay:s.pay,paid:!!s.paid,enc:!!s.enc,bv:null};
+ const cl=[...new Set(S.sales.map(x=>x.client).concat((S.clients||[]).map(c=>c.name)).filter(Boolean))];
+ $('#sheet').innerHTML=`<div><h2>${id?'Editar venda':'Nova venda'}</h2>
+ <label>Cliente</label><input class="f" id="c" list="cl" value="${esc(s.client)}" placeholder="Nome de quem comprou" onchange="fillEnd()"><datalist id="cl">${cl.map(n=>`<option value="${esc(n)}">`).join('')}</datalist>
+ <label>Tipo</label><div class="seg"><button class="chip ${F.enc?'':'on'}" id="e0" onclick="setE(0)">Venda do dia</button><button class="chip ${F.enc?'on':''}" id="e1" onclick="setE(1)">📦 Encomenda</button></div>
+ <label>Data da venda / entrega</label><input class="f" id="dt" type="date" value="${s.date||date}">
+ <label>💰 Cliente quer por valor? (R$)</label><div class="chips" style="margin-bottom:6px">${[5,10,15,20,30,50].map(n=>`<button class="chip" onclick="$('#bv').value=${n};byVal(${n})">R$ ${n}</button>`).join('')}</div><input class="f" id="bv" type="number" step="0.01" inputmode="decimal" placeholder="Outro valor, ex.: 12" oninput="byVal(this.value)"><small id="bh" style="color:var(--or);font-weight:700"></small>
+ <label>Quantidade de marmotas</label><div class="chips" id="qc">${[10,20,30,40,50,60,70,80,90,100,150,200].map(n=>`<button class="chip ${n==F.qty?'on':''}" onclick="setQ(${n})">${n}</button>`).join('')}</div>
+ <input class="f" id="q" type="number" inputmode="numeric" value="${s.qty}" oninput="F.qty=+this.value||0;clrBv();upd()" style="margin-top:6px">
+ <label>Entrega</label><div class="seg"><button class="chip ${F.delivery?'':'on'}" id="d0" onclick="setD(0)">Retirada</button><button class="chip ${F.delivery?'on':''}" id="d1" onclick="setD(1)">🛵 Entrega +R$ 3</button></div>
+ <div id="eb" style="display:${F.delivery?'block':'none'}"><label>Endereço da entrega</label><input class="f" id="ea" value="${esc(s.end||'')}" placeholder="Rua, número, bairro"></div>
+ <label>Forma de pagamento</label><div class="seg"><button class="chip ${F.pay=='din'?'on':''}" id="p0" onclick="setP('din')">💵 Dinheiro</button><button class="chip ${F.pay=='pix'?'on':''}" id="p1" onclick="setP('pix')">📱 Pix</button></div>
+ <label>Valor (R$)</label><input class="f" id="v" type="number" step="0.01" inputmode="decimal" value="${s.value}">
+ <label>Situação</label><div class="seg"><button class="chip ${F.paid?'on':''}" id="k1" onclick="setK(1)">✔ Já pagou</button><button class="chip ${F.paid?'':'on'}" id="k0" onclick="setK(0)">⏳ Vai pagar depois</button></div>
+ <div id="sgb" style="display:${F.paid?'none':'block'}"><label>Já recebeu algum valor? Sinal (R$)</label><input class="f" id="sg" type="number" step="0.01" inputmode="decimal" value="${s.rec||''}" placeholder="0,00"></div>
+ <div class="row">${id?'<button class="btn d" onclick="delSale()">Excluir</button>':''}<button class="btn g" onclick="closeS()">Voltar</button><button class="btn" onclick="saveSale()">Salvar</button></div></div>`;
+ $('#sheet').classList.add('on');
+}
+function setE(x){F.enc=!!x;tog('#e1','#e0',!!x);if(x&&F.paid)setK(0)}
+function setK(x){F.paid=!!x;tog('#k1','#k0',!!x);$('#sgb').style.display=x?'none':'block'}
+function setD(x){F.delivery=!!x;tog('#d1','#d0',!!x);$('#eb').style.display=x?'block':'none';upd();if(x)fillEnd()}
+function fillEnd(){const c=(S.clients||[]).find(x=>key(x.name)==key($('#c').value));if(c&&c.addr&&F.delivery&&!$('#ea').value)$('#ea').value=c.addr}
+function saveSale(){
+ const o={client:$('#c').value.trim(),date:$('#dt').value||date,qty:F.qty,delivery:F.delivery,end:F.delivery?$('#ea').value.trim():'',enc:F.enc,pay:F.pay,paid:F.paid,rec:F.paid?0:Math.max(0,+$('#sg').value||0),value:+$('#v').value||0};
+ if(!o.paid&&o.value>0&&o.rec>=o.value){o.paid=true;o.rec=0}
+ if(F.id){Object.assign(S.sales.find(x=>x.id==F.id),o)}else S.sales.push(Object.assign({id:Date.now()},o));
+ const nm=o.client;S.clients=S.clients||[];const c=S.clients.find(c=>key(c.name)==key(nm));
+ if(nm&&!c)S.clients.push({name:nm,phone:'',addr:o.end,obs:''});else if(c&&o.end&&!c.addr)c.addr=o.end;
+ if(!o.enc)date=o.date;save();closeS();render()}
+function stats(){const m={};S.sales.forEach(s=>{const k=key(s.client);if(!k)return;const o=m[k]||(m[k]={name:s.client,tot:0,qty:0,owe:0,last:'',n:0});o.tot+=s.value;o.qty+=+s.qty;o.n++;o.owe+=owe(s);if(s.date>o.last)o.last=s.date});return m}
+function dev(){const o={};S.sales.filter(s=>owe(s)>0).forEach(s=>{const k=s.client||'Sem nome';o[k]=(o[k]||0)+owe(s)});const e=Object.entries(o).sort((a,b)=>b[1]-a[1]);
+return `<div class="card"><b>⏳ Quem ainda deve</b>`+(e.length?e.map(([k,v])=>rw(esc(k),R(v),'neg')).join(''):'<div class="empty" style="padding:10px">Ninguém devendo 🎉</div>')+`</div>`}
+function dayTot(){const v=S.sales.filter(s=>s.date==date),made=S.days[date]?.made||0;return{v,made,qt:sum(v,s=>+s.qty),din:sum(v.filter(s=>s.pay=='din'),rec),pix:sum(v.filter(s=>s.pay=='pix'),rec),fia:sum(v,owe),fat:sum(v,s=>s.value),ent:v.filter(s=>s.delivery).length,gas:sum(S.fin.filter(f=>f.date==date&&f.type=='gasto'),f=>f.value)}}
+function wpp(){const t=dayTot(),x=`🥨 *Marmotas da Dona Selma*\n📅 ${label()}\n\nFeitas: ${t.made}\nVendidas: ${t.qt}\nSobraram: ${t.made-t.qt}\n\n💵 Dinheiro: ${R(t.din)}\n📱 Pix: ${R(t.pix)}\n⏳ A receber: ${R(t.fia)}`;window.open('https://wa.me/?text='+encodeURIComponent(x),'_blank')}
+async function fecharImg(){const t=dayTot(),W=1080,H=1350,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');
+ const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,'#4a2410');g.addColorStop(1,'#1e0f07');x.fillStyle=g;x.fillRect(0,0,W,H);
+ const im=await new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.onerror=()=>r(null);i.src='dona-selma.jpg'});
+ if(im){x.save();x.beginPath();x.arc(W-190,190,120,0,7);x.clip();x.drawImage(im,W-310,70,240,240);x.restore();x.strokeStyle='#ffc93c';x.lineWidth=10;x.beginPath();x.arc(W-190,190,120,0,7);x.stroke()}
+ x.fillStyle='#fff3dc';x.font='800 88px system-ui,sans-serif';x.fillText('MARMOTAS',60,150);x.fillStyle='#ff8a3d';x.fillText('CASEIRAS',60,240);
+ x.fillStyle='#ffc93c';x.font='700 36px system-ui';x.fillText('DA DONA SELMA · Fechamento do dia',60,305);x.fillStyle='#fff3dc';x.font='600 40px system-ui';x.fillText(label().replace('Hoje · ',''),60,375);
+ const bx=(a,b,w,h,col,l,v,fs)=>{x.fillStyle=col;x.beginPath();x.roundRect(a,b,w,h,28);x.fill();x.fillStyle='#fff';x.font='600 34px system-ui';x.fillText(l,a+28,b+52);x.font='800 '+fs+'px system-ui';x.fillText(v,a+28,b+h-34)};
+ bx(60,430,300,150,'#a63b07','🥨 Feitas',t.made,70);bx(390,430,300,150,'#d9480f','Vendidas',t.qt,70);bx(720,430,300,150,'#7a4a2a','Sobraram',t.made-t.qt,70);
+ bx(60,620,470,200,'#1b7a30','💵 Dinheiro',R(t.din),60);bx(550,620,470,200,'#0b7f86','📱 Pix',R(t.pix),60);
+ bx(60,850,470,200,'#d9480f','⏳ A receber',R(t.fia),60);bx(550,850,470,200,'#5a2d17','Total vendido',R(t.fat),60);
+ x.fillStyle='#fff3dc';x.font='600 38px system-ui';x.fillText('🛵 Entregas: '+t.ent+'   ·   Gastos do dia: '+R(t.gas),60,1130);
+ x.fillStyle='#ffc93c';x.font='italic 34px system-ui';x.fillText('Feitas com carinho e aquele gostinho de casa',60,1260);
+ c.toBlob(async b=>{const f=new File([b],'fechamento-marmotas.png',{type:'image/png'});
+ if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:'Fechamento do dia'});return}catch(e){}}
+ $('#sheet').innerHTML=`<div><h2>Fechamento do dia</h2><img src="${URL.createObjectURL(b)}" style="width:100%;border-radius:12px;margin-top:10px"><p style="color:var(--mut)">Segure o dedo na imagem para salvar ou compartilhar.</p><div class="row"><button class="btn g" onclick="closeS()">Fechar</button></div></div>`;$('#sheet').classList.add('on')},'image/png')}
+function resumo(){
+ const m=date.slice(0,7),v=S.sales.filter(s=>s.date.startsWith(m)),f=S.fin.filter(x=>x.date.startsWith(m));
+ const din=sum(v.filter(s=>s.pay=='din'),rec),pix=sum(v.filter(s=>s.pay=='pix'),rec),fia=sum(v,owe),fat=sum(v,s=>s.value);
+ const g=sum(f.filter(x=>x.type=='ganho'),x=>x.value),d=sum(f.filter(x=>x.type=='gasto'),x=>x.value),saldo=din+pix+g-d;
+ const made=sum(Object.keys(S.days).filter(k=>k.startsWith(m)),k=>S.days[k].made),qt=sum(v,s=>+s.qty);
+ const n=new Date(+m.slice(0,4),+m.slice(5),0).getDate(),dias=Array.from({length:n},(_,i)=>sum(v.filter(s=>+s.date.slice(8)==i+1),s=>s.value)),mx=Math.max(...dias,1);
+ const nome=new Date(m+'-15T12:00').toLocaleDateString('pt-BR',{month:'long',year:'numeric'});
+ const meta=+S.meta||0,pm=meta?Math.min(100,fat/meta*100):0,cpm=made?d/made:0,ppm=qt?fat/qt:0,lpm=ppm-cpm,mg=ppm?lpm/ppm*100:0;
+ const gg={};f.filter(x=>x.type=='gasto').forEach(x=>{const k=x.desc.trim().toLowerCase();gg[k]=(gg[k]||0)+x.value});
+ const tg=Object.entries(gg).sort((a,b)=>b[1]-a[1]).slice(0,5);
+ const wd=Array(7).fill(0);S.sales.forEach(s=>wd[new Date(s.date+'T12:00').getDay()]+=s.value);const bw=wd.indexOf(Math.max(...wd));
+ const cm={};v.forEach(s=>{const k=key(s.client);if(k)(cm[k]=cm[k]||{name:s.client,t:0}).t+=s.value});const top=Object.values(cm).sort((a,b)=>b.t-a.t)[0];
+ const sw=x=>{const A=iso(x),B=iso(addD(x,6)),l=S.sales.filter(s=>s.date>=A&&s.date<=B);return{v:sum(l,s=>s.value),q:sum(l,s=>+s.qty)}};
+ const w0=wk0(date),w1=sw(w0),w2=sw(addD(w0,-7)),dif=w2.v?Math.round((w1.v-w2.v)/w2.v*100):null;
+ return nav()+`<h2 style="margin:0 2px 8px">Resumo de ${nome}</h2>
+ <div class="card" style="text-align:center;background:linear-gradient(135deg,#5a2d17,#8a4a24);color:#fff3dc"><small>Lucro do mês (recebido + ganhos − gastos)</small><div class="big" style="font-size:34px;color:${saldo<0?'#ff8787':'#ffc93c'}">${R(saldo)}</div></div>
+ <div class="card"><b>🎯 Meta de vendas do mês</b><input class="f" type="number" inputmode="decimal" placeholder="Quanto quer vender? (R$)" value="${meta||''}" onchange="S.meta=+this.value||0;save();render()" style="margin:8px 0"><div class="bar"><i style="width:${pm}%"></i></div><small style="color:var(--mut)">${meta?R(fat)+' de '+R(meta)+' ('+Math.round(pm)+'%) · faltam '+R(Math.max(0,meta-fat)):'Defina a meta para acompanhar o progresso'}</small></div>
+ <div class="grid"><div class="stat s1"><small>💵 Dinheiro</small><div class="big">${R(din)}</div></div><div class="stat s2"><small>📱 Pix</small><div class="big">${R(pix)}</div></div>
+ <div class="stat s3"><small>⏳ A receber</small><div class="big">${R(fia)}</div></div><div class="stat s4"><small>🥨 Vendidas / feitas</small><div class="big">${qt} / ${made}</div></div></div>
+ <div class="card"><b>💡 Custo e lucro</b>${rw('Gastos do mês',R(d),'neg')}${rw('Custo por marmota feita',R(cpm))}${rw('Preço médio de venda',R(ppm))}${rw('Lucro por marmota',R(lpm),lpm<0?'neg':'pos')}${rw('Margem',Math.round(mg)+'%',mg<0?'neg':'pos')}${tg.length?'<div style="margin-top:10px;color:var(--mut);font-size:13px">Onde mais gastou</div>'+tg.map(([k,x])=>rw(esc(k),R(x))).join(''):''}${rw('⬆ Outros ganhos',R(g),'pos')}</div>
+ <div class="card"><b>📈 Esta semana</b>${rw('Vendido',R(w1.v)+' · '+w1.q+' un.')}${rw('Semana passada',R(w2.v)+' · '+w2.q+' un.')}${dif===null?'':rw('Variação',(dif>0?'+':'')+dif+'%',dif<0?'neg':'pos')}</div>
+ <div class="card"><b>⭐ Destaques</b>${rw('Ticket médio',R(v.length?fat/v.length:0))}${Math.max(...wd)>0?rw('Melhor dia da semana',DN[bw]):''}${top?rw('Cliente do mês',esc(top.name)+' · '+R(top.t)):''}${made?rw('Aproveitamento',Math.round(qt/made*100)+'% vendido'):''}</div>
+ <div class="card"><b>Vendas por dia</b><div class="col" style="margin-top:10px">${dias.map(x=>`<i style="height:${x/mx*100}%"></i>`).join('')}</div></div>${dev()}<div class="row" style="margin-bottom:10px"><button class="btn g" onclick="bk()">💾 Copiar backup</button><button class="btn g" onclick="rs()">♻ Restaurar</button></div>`;
+}
+
 const h=new Date().getHours();$('header small').textContent=(h<12?'Bom dia':h<18?'Boa tarde':'Boa noite')+', Dona Selma! Feitas com carinho e aquele gostinho de casa';
 render();
 setTimeout(()=>{const s=$('#sp');s.style.opacity=0;setTimeout(()=>s.remove(),500)},1100);
