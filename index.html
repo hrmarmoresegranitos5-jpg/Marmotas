@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Marmotas da Dona Selma</title>
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#5a2d17"><link rel="apple-touch-icon" href="icon-192.png"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Marmotas">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);--bg:#fbf1e0;--card:#fffaf0;--ink:#3a1f12;--mut:#8a6a54;--br:#5a2d17;--or:#e8590c;--ye:#ffc93c;--gr:#2f9e44;--rd:#c92a2a;--ln:#ead9bd;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1e120b;--card:#2b1b11;--ink:#f7e9d3;--mut:#b99a80;--br:#3b2012;--ln:#4a3020;--gr:#51cf66;--rd:#ff6b6b;color-scheme:dark}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg) radial-gradient(#e8590c18 2px,transparent 2.5px) 0 0/24px 24px;color:var(--ink);font:16px/1.4 system-ui,-apple-system,Segoe UI,sans-serif;padding-bottom:calc(180px + env(safe-area-inset-bottom,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:#5a2d17;z-index:10}
+h1,h2,.big{font-family:'Baloo 2',system-ui,sans-serif;margin:0}
+header{position:relative;color:#fff3dc;padding:14px 14px 20px;border-radius:0 0 28px 28px;box-shadow:0 6px 18px #5a2d1755;background:linear-gradient(180deg,#2a140acc,#5a2d17dd),url(marmotas.jpg) center/cover;display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:center}
+.sign{background:#fff6e3;border:4px solid #8a5a34;border-radius:14px;padding:6px 12px 8px;text-align:center;box-shadow:0 4px 0 #5a2d17,0 8px 16px #0005;transform:rotate(-1.5deg);justify-self:start}
+.sign div{font-family:'Baloo 2',system-ui,sans-serif;font-weight:800;line-height:.95}
+.t1{font-size:30px;color:#3a1f12}.t2{font-size:34px;color:#e8590c}.t3{font-size:12px;color:#fff3dc;background:#5a2d17;border-radius:6px;padding:3px 8px;margin-top:5px}
+.dona{width:92px;height:92px;border-radius:50%;object-fit:cover;border:4px solid var(--ye);box-shadow:0 4px 14px #0007}
+#inst{display:none;grid-column:1/-1;border:0;border-radius:12px;background:var(--ye);color:#3a1f12;font-weight:800;padding:9px}
+#sp{position:fixed;inset:0;z-index:99;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:linear-gradient(#2a140acc,#5a2d17ee),url(marmotas.jpg) center/cover;color:#fff3dc;font:800 26px 'Baloo 2',sans-serif;transition:opacity .5s}
+#sp img{width:140px;height:140px;border-radius:50%;object-fit:cover;border:5px solid var(--ye)}
+.stat{position:relative;overflow:hidden}.stat::after{content:"\1F968";position:absolute;right:-6px;bottom:-12px;font-size:58px;opacity:.18;transform:rotate(-15deg)}
+.empty::before{content:"";display:block;width:84px;height:84px;margin:0 auto 8px;border-radius:50%;background:url(marmotas.jpg) center/cover;border:3px solid var(--ye)}
+
+header small{grid-column:1/-1;font-style:italic}
+main{max-width:620px;margin:0 auto;padding:0 14px}
+.nav{display:flex;align-items:center;gap:8px;margin:16px 0 12px;background:var(--card);border:1px solid var(--ln);border-radius:16px;padding:6px;box-shadow:0 3px 10px #0001}
+.nav button{border:0;background:var(--ye);color:#3a1f12;font-size:20px;font-weight:800;width:40px;height:40px;border-radius:12px}
+.nav div{position:relative;flex:1;text-align:center;font-weight:700;font-size:15px}
+.nav input{opacity:0;position:absolute;inset:0;width:100%;height:100%}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:18px;padding:14px;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.stat{border-radius:18px;padding:12px 14px;color:#fff}
+.stat small{display:block;opacity:.9;font-weight:600}.stat .big{font-size:26px;font-weight:800;line-height:1.1}
+.s1{background:linear-gradient(135deg,#2f9e44,#1b7a30)}.s2{background:linear-gradient(135deg,#0ca5a5,#0b7f86)}
+.s3{background:linear-gradient(135deg,#f59f00,#d9480f)}.s4{background:linear-gradient(135deg,#e8590c,#a63b07)}
+.made{display:flex;align-items:center;gap:10px;justify-content:space-between}
+.made .step{display:flex;align-items:center;gap:8px}
+.made button{width:42px;height:42px;border-radius:50%;border:0;background:var(--or);color:#fff;font-size:22px;font-weight:800}
+.made input{width:84px;text-align:center;font:800 26px 'Baloo 2',sans-serif;border:2px dashed var(--ln);border-radius:12px;background:transparent;color:var(--ink);padding:2px}
+.bar{height:8px;background:var(--ln);border-radius:9px;overflow:hidden;margin-top:10px}.bar i{display:block;height:100%;background:var(--or)}
+.sale{display:flex;gap:10px;align-items:center;margin-bottom:8px;background:var(--card);border:1px solid var(--ln);border-left:6px solid var(--gr);border-radius:16px;padding:10px 12px}
+.sale.no{border-left-color:var(--rd)}
+.sale .i{flex:1;min-width:0}.sale b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sale small{color:var(--mut)}.sale .v{font:800 18px 'Baloo 2',sans-serif;text-align:right}
+.tag{border:0;border-radius:20px;padding:4px 10px;font-weight:700;font-size:12px;margin-top:3px;background:#2f9e4430;color:var(--gr)}
+.no .tag{background:#c92a2a25;color:var(--rd)}
+.fab{position:fixed;right:16px;bottom:calc(84px + env(safe-area-inset-bottom,0px));background:var(--or);color:#fff;border:0;border-radius:30px;padding:14px 22px;font:800 17px 'Baloo 2',sans-serif;box-shadow:0 8px 20px #e8590c66;z-index:5}
+.tabs{border-top:3px solid #ffc93c;position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--br);padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px));z-index:6}
+.tabs button{flex:1;border:0;background:none;color:#e9cfae;font:700 12px system-ui;padding:6px;border-radius:14px}
+.tabs button span{display:block;font-size:22px}.tabs .on{background:var(--ye);color:#3a1f12}
+.empty{text-align:center;color:var(--mut);padding:26px 10px}
+.sheet{position:fixed;inset:0;background:#0008;display:none;align-items:flex-end;z-index:20}.sheet.on{display:flex}
+.sheet>div{background:var(--bg);width:100%;max-width:620px;margin:0 auto;border-radius:24px 24px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom,0px));max-height:92%;overflow:auto}
+label{display:block;font-weight:700;font-size:13px;color:var(--mut);margin:12px 0 5px}
+input.f,select.f{width:100%;padding:12px;border:1.5px solid var(--ln);border-radius:12px;background:var(--card);color:var(--ink);font-size:17px}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.chip{flex:none;border:1.5px solid var(--ln);background:var(--card);color:var(--ink);border-radius:20px;padding:7px 13px;font-weight:700}
+.chip.on{background:var(--or);border-color:var(--or);color:#fff}
+.seg{display:flex;gap:8px}.seg .chip{flex:1;text-align:center;border-radius:12px;padding:11px}
+.row{display:flex;gap:8px;margin-top:16px}
+.btn{flex:1;border:0;border-radius:14px;padding:14px;font:800 17px 'Baloo 2',sans-serif;background:var(--or);color:#fff}
+.btn.g{background:var(--ln);color:var(--ink);flex:.5}.btn.d{background:#c92a2a22;color:var(--rd);flex:.5}
+.pos{color:var(--gr)}.neg{color:var(--rd)}
+.col{display:flex;align-items:flex-end;gap:3px;height:90px}.col i{flex:1;background:var(--or);border-radius:4px 4px 0 0;min-height:2px}
+</style></head><body>
+<div id="sp"><img src="dona-selma.jpg" alt=""><div>Marmotas Caseiras 🥨</div></div>
+<header><div class="sign"><div class="t1">MARMOTAS</div><div class="t2">CASEIRAS</div><div class="t3">DA DONA SELMA</div></div><img class="dona" src="dona-selma.jpg" alt="Dona Selma" onerror="this.style.display='none'"><button id="inst">📲 Instalar o app no celular</button><small>Feitas com carinho e aquele gostinho de casa</small></header>
+<main id="app"></main>
+<div class="sheet" id="sheet"></div>
+<nav class="tabs"></nav>
+<script>
+const $=s=>document.querySelector(s),K='marmotas_v1';
+let S={days:{},sales:[],fin:[]};
+try{const r=localStorage.getItem(K);if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}};
+const R=v=>(+v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const iso=d=>{const z=new Date(d.getTime()-d.getTimezoneOffset()*6e4);return z.toISOString().slice(0,10)};
+let date=iso(new Date()),tab='hoje',F={};
+const price=q=>q==10?7:q==20?13:+(q*.6).toFixed(2);
+const shift=n=>{const d=new Date(date+'T12:00');d.setDate(d.getDate()+n);date=iso(d);render()};
+const label=()=>{const t=iso(new Date());const l=new Date(date+'T12:00').toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'});return date==t?'Hoje · '+l:l[0].toUpperCase()+l.slice(1)};
+const sum=(a,f)=>a.reduce((t,x)=>t+f(x),0);
+const nav=()=>`<div class="nav"><button onclick="shift(-1)">‹</button><div>📅 ${label()}<input id="dp" type="date" value="${date}" onchange="date=this.value||date;render()"></div><button onclick="shift(1)">›</button></div><div class="chips" style="margin:-4px 0 12px">${[['Anteontem',-2],['Ontem',-1],['Hoje',0]].map(([n,d])=>{const x=new Date();x.setDate(x.getDate()+d);const k=iso(x);return `<button class="chip ${k==date?'on':''}" onclick="date='${k}';render()">${n}</button>`}).join('')}</div>`;
+function render(){
+ document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t==tab));
+ $('#app').innerHTML=tab=='hoje'?hoje():tab=='fin'?fin():tab=='cli'?cli():resumo();
+ document.querySelector('.fab')?.remove();
+ if(tab=='hoje'){document.body.insertAdjacentHTML('beforeend','<button class="fab" onclick="saleSheet()">＋ Nova venda</button>')}
+ if(tab=='fin'){document.body.insertAdjacentHTML('beforeend','<button class="fab" onclick="finSheet()">＋ Lançar</button>')}
+ if(tab=='cli'){document.body.insertAdjacentHTML('beforeend','<button class="fab" onclick="cliSheet()">＋ Novo cliente</button>')}
+}
+function hoje(){
+ const v=S.sales.filter(s=>s.date==date),made=S.days[date]?.made||0,pd=v.filter(s=>s.paid);
+ const din=sum(pd.filter(s=>s.pay=='din'),s=>s.value),pix=sum(pd.filter(s=>s.pay=='pix'),s=>s.value);
+ const fia=sum(v.filter(s=>!s.paid),s=>s.value),qt=sum(v,s=>+s.qty);
+ const pct=made?Math.min(100,qt/made*100):0;
+ return nav()+`<div class="card"><div class="made"><div><h2 style="font-size:20px">Marmotas feitas</h2><small style="color:var(--mut)">${qt} vendidas · sobraram ${made-qt}</small></div>
+ <div class="step"><button onclick="mk(-10)">−</button><input type="number" inputmode="numeric" value="${made}" onchange="mkSet(this.value)"><button onclick="mk(10)">+</button></div></div>
+ <div class="bar"><i style="width:${pct}%"></i></div>${made&&qt>=made?'<div style="margin-top:8px;font-weight:700;color:var(--or)">🎉 Esgotou! Vendeu tudo hoje!</div>':''}</div>
+ <div class="grid"><div class="stat s1"><small>💵 Dinheiro</small><div class="big">${R(din)}</div></div>
+ <div class="stat s2"><small>📱 Pix</small><div class="big">${R(pix)}</div></div>
+ <div class="stat s3"><small>⏳ A receber</small><div class="big">${R(fia)}</div></div>
+ <div class="stat s4"><small>🥨 Vendidas</small><div class="big">${qt}</div></div></div>
+ <button class="btn" style="width:100%;margin-bottom:14px;background:#25a244" onclick="wpp()">📲 Enviar resumo do dia no WhatsApp</button><h2 style="margin:6px 2px 8px">Entregas e vendas</h2>`+
+ (v.length?v.map(s=>`<div class="sale ${s.paid?'':'no'}"><div class="i" onclick="saleSheet(${s.id})"><b>${esc(s.client||'Cliente')}</b><small>${s.qty} un. · ${s.pay=='pix'?'📱 Pix':'💵 Dinheiro'}${s.delivery?' · 🛵 entrega':''}</small></div>
+ <div class="v">${R(s.value)}<br><button class="tag" onclick="pay(${s.id})">${s.paid?'✔ Pago':'Pendente'}</button></div></div>`).join(''):'<div class="empty">Nenhuma venda neste dia.<br>Toque em “Nova venda” 👇</div>');
+}
+function mk(n){S.days[date]={made:Math.max(0,(S.days[date]?.made||0)+n)};save();render()}
+function mkSet(v){S.days[date]={made:Math.max(0,+v||0)};save();render()}
+function pay(id){const s=S.sales.find(x=>x.id==id);s.paid=!s.paid;save();render()}
+function saleSheet(id){
+ const s=id?S.sales.find(x=>x.id==id):{client:'',qty:10,delivery:false,pay:'pix',paid:true,value:7};
+ F={id:id||0,qty:s.qty,delivery:s.delivery,pay:s.pay,paid:s.paid};
+ $('#sheet').innerHTML=`<div><h2>${id?'Editar venda':'Nova venda'}</h2>
+ <label>Cliente</label><input class="f" id="c" list="cl" value="${esc(s.client)}" placeholder="Nome de quem comprou"><datalist id="cl">${[...new Set(S.sales.map(x=>x.client).concat((S.clients||[]).map(c=>c.name)).filter(Boolean))].map(n=>`<option value="${esc(n)}">`).join('')}</datalist>
+ <label>💰 Cliente quer por valor? (R$)</label><div class="chips" style="margin-bottom:6px">${[5,10,15,20,30,50].map(n=>`<button class="chip" onclick="$('#bv').value=${n};byVal(${n})">R$ ${n}</button>`).join('')}</div><input class="f" id="bv" type="number" step="0.01" inputmode="decimal" placeholder="Outro valor, ex.: 12" oninput="byVal(this.value)"><small id="bh" style="color:var(--or);font-weight:700"></small>
+ <label>Quantidade de marmotas</label><div class="chips" id="qc">${[10,20,30,40,50,60,70,80,90,100,150,200].map(n=>`<button class="chip ${n==F.qty?'on':''}" onclick="setQ(${n})">${n}</button>`).join('')}</div>
+ <input class="f" id="q" type="number" inputmode="numeric" value="${s.qty}" oninput="F.qty=+this.value||0;clrBv();upd()" style="margin-top:6px">
+ <label>Entrega</label><div class="seg"><button class="chip ${F.delivery?'':'on'}" id="d0" onclick="setD(0)">Retirada</button><button class="chip ${F.delivery?'on':''}" id="d1" onclick="setD(1)">🛵 Entrega +R$ 3</button></div>
+ <label>Forma de pagamento</label><div class="seg"><button class="chip ${F.pay=='din'?'on':''}" id="p0" onclick="setP('din')">💵 Dinheiro</button><button class="chip ${F.pay=='pix'?'on':''}" id="p1" onclick="setP('pix')">📱 Pix</button></div>
+ <label>Valor (R$)</label><input class="f" id="v" type="number" step="0.01" inputmode="decimal" value="${s.value}">
+ <label>Situação</label><div class="seg"><button class="chip ${F.paid?'on':''}" id="k1" onclick="setK(1)">✔ Já pagou</button><button class="chip ${F.paid?'':'on'}" id="k0" onclick="setK(0)">⏳ Vai pagar depois</button></div>
+ <div class="row">${id?'<button class="btn d" onclick="delSale()">Excluir</button>':''}<button class="btn g" onclick="closeS()">Voltar</button><button class="btn" onclick="saveSale()">Salvar</button></div></div>`;
+ $('#sheet').classList.add('on');
+}
+const closeS=()=>$('#sheet').classList.remove('on');
+const tog=(a,b,on)=>{$(a).classList.toggle('on',on);$(b).classList.toggle('on',!on)};
+function upd(){$('#v').value=((F.bv||price(F.qty))+(F.delivery?3:0)).toFixed(2);document.querySelectorAll('#qc .chip').forEach(c=>c.classList.toggle('on',+c.textContent==F.qty))}
+function clrBv(){F.bv=null;const a=$('#bv');if(a)a.value='';const b=$('#bh');if(b)b.textContent=''}
+function byVal(x){x=+x;if(!(x>0)){clrBv();return}F.bv=x;F.qty=x==7?10:x==13?20:Math.floor(x/.6+1e-9);$('#q').value=F.qty;upd();$('#bh').textContent='= '+F.qty+' marmotas'+(x-price(F.qty)>.009?' (sobram '+R(x-price(F.qty))+')':'')}
+function setQ(n){clrBv();F.qty=n;$('#q').value=n;upd()}
+function setD(x){F.delivery=!!x;tog('#d1','#d0',!!x);upd()}
+function setP(p){F.pay=p;tog('#p1','#p0',p=='pix')}
+function setK(x){F.paid=!!x;tog('#k1','#k0',!!x)}
+function saveSale(){
+ const o={client:$('#c').value.trim(),qty:F.qty,delivery:F.delivery,pay:F.pay,paid:F.paid,value:+$('#v').value||0};
+ if(F.id){Object.assign(S.sales.find(x=>x.id==F.id),o)}else S.sales.push(Object.assign({id:Date.now(),date},o));
+ const nm=o.client;S.clients=S.clients||[];if(nm&&!S.clients.some(c=>key(c.name)==key(nm)))S.clients.push({name:nm,phone:'',addr:'',obs:''});
+ save();closeS();render();
+}
+function delSale(){if(confirm('Excluir esta venda?')){S.sales=S.sales.filter(x=>x.id!=F.id);save();closeS();render()}}
+function fin(){
+ const l=S.fin.filter(f=>f.date==date),g=sum(l.filter(f=>f.type=='ganho'),f=>f.value),d=sum(l.filter(f=>f.type=='gasto'),f=>f.value);
+ return nav()+`<div class="grid"><div class="stat s1"><small>⬆ Ganhos</small><div class="big">${R(g)}</div></div><div class="stat s4"><small>⬇ Gastos</small><div class="big">${R(d)}</div></div></div>
+ <div class="card" style="text-align:center"><small style="color:var(--mut)">Saldo do dia (fora as vendas)</small><div class="big ${g-d<0?'neg':'pos'}" style="font-size:30px">${R(g-d)}</div></div>`+
+ (l.length?l.map(f=>`<div class="sale ${f.type=='gasto'?'no':''}" onclick="finDel(${f.id})"><div class="i"><b>${esc(f.desc)}</b><small>${f.type=='gasto'?'Gasto':'Ganho'} · toque para excluir</small></div><div class="v ${f.type=='gasto'?'neg':'pos'}">${f.type=='gasto'?'−':'+'}${R(f.value)}</div></div>`).join(''):'<div class="empty">Nada lançado neste dia.</div>');
+}
+function finSheet(){
+ F={type:'gasto'};
+ $('#sheet').innerHTML=`<div><h2>Novo lançamento</h2>
+ <div class="seg" style="margin-top:10px"><button class="chip on" id="t0" onclick="F.type='gasto';tog('#t0','#t1',1)">⬇ Gasto</button><button class="chip" id="t1" onclick="F.type='ganho';tog('#t1','#t0',1)">⬆ Ganho</button></div>
+ <label>Atalhos</label><div class="chips">${['Farinha','Polvilho','Ovos','Óleo','Gás','Embalagem','Queijo','Transporte'].map(n=>`<button class="chip" onclick="$('#fd').value='${n}'">${n}</button>`).join('')}</div>
+ <label>Descrição</label><input class="f" id="fd" placeholder="Ex.: saco de farinha">
+ <label>Valor (R$)</label><input class="f" id="fv" type="number" step="0.01" inputmode="decimal">
+ <div class="row"><button class="btn g" onclick="closeS()">Voltar</button><button class="btn" onclick="saveFin()">Salvar</button></div></div>`;
+ $('#sheet').classList.add('on');
+}
+function saveFin(){const v=+$('#fv').value;if(!v)return;S.fin.push({id:Date.now(),date,type:F.type,desc:$('#fd').value.trim()||(F.type=='gasto'?'Gasto':'Ganho'),value:v});save();closeS();render()}
+function finDel(id){if(confirm('Excluir este lançamento?')){S.fin=S.fin.filter(f=>f.id!=id);save();render()}}
+function resumo(){
+ const m=date.slice(0,7),v=S.sales.filter(s=>s.date.startsWith(m)),f=S.fin.filter(x=>x.date.startsWith(m)),pd=v.filter(s=>s.paid);
+ const din=sum(pd.filter(s=>s.pay=='din'),s=>s.value),pix=sum(pd.filter(s=>s.pay=='pix'),s=>s.value),fia=sum(v.filter(s=>!s.paid),s=>s.value);
+ const g=sum(f.filter(x=>x.type=='ganho'),x=>x.value),d=sum(f.filter(x=>x.type=='gasto'),x=>x.value),saldo=din+pix+g-d;
+ const made=sum(Object.keys(S.days).filter(k=>k.startsWith(m)),k=>S.days[k].made),qt=sum(v,s=>+s.qty);
+ const n=new Date(+m.slice(0,4),+m.slice(5),0).getDate(),dias=Array.from({length:n},(_,i)=>sum(v.filter(s=>+s.date.slice(8)==i+1),s=>s.value)),mx=Math.max(...dias,1);
+ const nome=new Date(m+'-15T12:00').toLocaleDateString('pt-BR',{month:'long',year:'numeric'});
+ return nav()+`<h2 style="margin:0 2px 8px">Resumo de ${nome}</h2>
+ <div class="card" style="text-align:center;background:linear-gradient(135deg,#5a2d17,#8a4a24);color:#fff3dc"><small>Lucro do mês (recebido + ganhos − gastos)</small><div class="big" style="font-size:34px;color:${saldo<0?'#ff8787':'#ffc93c'}">${R(saldo)}</div></div>
+ <div class="grid"><div class="stat s1"><small>💵 Dinheiro</small><div class="big">${R(din)}</div></div><div class="stat s2"><small>📱 Pix</small><div class="big">${R(pix)}</div></div>
+ <div class="stat s3"><small>⏳ A receber</small><div class="big">${R(fia)}</div></div><div class="stat s4"><small>🥨 Vendidas / feitas</small><div class="big">${qt} / ${made}</div></div></div>
+ <div class="card"><div style="display:flex;justify-content:space-between"><span>⬆ Outros ganhos</span><b class="pos">${R(g)}</b></div><div style="display:flex;justify-content:space-between;margin-top:6px"><span>⬇ Gastos</span><b class="neg">${R(d)}</b></div></div>
+ <div class="card"><b>Vendas por dia</b><div class="col" style="margin-top:10px">${dias.map(x=>`<i style="height:${x/mx*100}%"></i>`).join('')}</div></div>${dev()}<div class="row" style="margin-bottom:10px"><button class="btn g" onclick="bk()">💾 Copiar backup</button><button class="btn g" onclick="rs()">♻ Restaurar</button></div>`;
+}
+$('.tabs').innerHTML=[['hoje','🥨','Vendas'],['fin','💰','Gastos'],['cli','👥','Clientes'],['res','📊','Resumo']].map(t=>`<button data-t="${t[0]}" onclick="tab='${t[0]}';render()"><span>${t[1]}</span>${t[2]}</button>`).join('');
+$('#sheet').addEventListener('click',e=>{if(e.target.id=='sheet')closeS()});
+let CQ='',CL=[];const key=n=>(n||'').trim().toLowerCase();
+function stats(){const m={};S.sales.forEach(s=>{const k=key(s.client);if(!k)return;const o=m[k]||(m[k]={name:s.client,tot:0,qty:0,owe:0,last:'',n:0});o.tot+=s.value;o.qty+=+s.qty;o.n++;if(!s.paid)o.owe+=s.value;if(s.date>o.last)o.last=s.date});return m}
+function cli(){return `<h2 style="margin:14px 2px 8px">👥 Clientes</h2><input class="f" placeholder="🔍 Buscar cliente" value="${esc(CQ)}" oninput="CQ=this.value;$('#cl2').innerHTML=clist()" style="margin-bottom:10px"><div id="cl2">${clist()}</div>`}
+function clist(){const st=stats(),all={};(S.clients||[]).forEach(c=>all[key(c.name)]=Object.assign({tot:0,qty:0,owe:0,last:'',n:0},st[key(c.name)],c));Object.keys(st).forEach(k=>{if(!all[k])all[k]=st[k]});
+CL=Object.values(all).filter(c=>key(c.name).includes(key(CQ))).sort((a,b)=>b.tot-a.tot);
+return CL.length?CL.map((c,i)=>`<div class="sale ${c.owe?'no':''}" onclick="cliSheet(${i})"><div class="i"><b>${!CQ&&i<3&&c.tot?['🥇','🥈','🥉'][i]+' ':''}${esc(c.name)}</b><small>${c.n} compras · ${c.qty} un.${c.phone?' · 📞':''}${c.last?' · última '+c.last.split('-').reverse().slice(0,2).join('/'):''}</small></div><div class="v">${R(c.tot)}${c.owe?`<br><small class="neg">deve ${R(c.owe)}</small>`:''}</div></div>`).join(''):'<div class="empty">Nenhum cliente ainda.<br>Toque em “Novo cliente” ou faça uma venda.</div>'}
+function cliSheet(i){const c=i==null?{name:''}:CL[i];F={k:key(c.name),owe:c.owe||0};
+const h=F.k?S.sales.filter(s=>key(s.client)==F.k).sort((a,b)=>a.date<b.date?1:-1).slice(0,8):[];
+$('#sheet').innerHTML=`<div><h2>${i==null?'Novo cliente':'Cliente'}</h2>
+<label>Nome</label><input class="f" id="cn" value="${esc(c.name)}">
+<label>Telefone (WhatsApp)</label><input class="f" id="cp" type="tel" inputmode="tel" value="${esc(c.phone||'')}" placeholder="74 99999-9999">
+<label>Endereço / bairro</label><input class="f" id="ca" value="${esc(c.addr||'')}">
+<label>Observações</label><input class="f" id="co" value="${esc(c.obs||'')}" placeholder="Ex.: prefere pacote de 50">
+${c.owe?`<button class="btn" style="width:100%;margin-top:12px;background:#25a244" onclick="cobrar()">💬 Cobrar ${R(c.owe)} no WhatsApp</button>`:''}
+${h.length?'<label>Últimas compras</label>'+h.map(s=>`<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--ln)"><span>${s.date.split('-').reverse().slice(0,2).join('/')} · ${s.qty} un. ${s.paid?'':'⏳'}</span><b>${R(s.value)}</b></div>`).join(''):''}
+<div class="row">${i!=null?'<button class="btn d" onclick="cliDel()">Apagar dados</button>':''}<button class="btn g" onclick="closeS()">Voltar</button><button class="btn" onclick="cliSave()">Salvar</button></div></div>`;$('#sheet').classList.add('on')}
+function cliSave(){const n=$('#cn').value.trim();if(!n)return;S.clients=S.clients||[];
+if(F.k&&key(n)!=F.k)S.sales.forEach(s=>{if(key(s.client)==F.k)s.client=n});
+S.clients=S.clients.filter(c=>key(c.name)!=F.k&&key(c.name)!=key(n));
+S.clients.push({name:n,phone:$('#cp').value.trim(),addr:$('#ca').value.trim(),obs:$('#co').value.trim()});save();closeS();render()}
+function cliDel(){if(confirm('Apagar telefone, endereço e observações deste cliente? As vendas continuam salvas.')){S.clients=(S.clients||[]).filter(c=>key(c.name)!=F.k);save();closeS();render()}}
+function cobrar(){const ph=$('#cp').value.replace(/\D/g,''),t=`Olá, ${$('#cn').value.trim()}! Passando para lembrar do pagamento das marmotas da Dona Selma: ${R(F.owe)}. Pode ser por Pix ou dinheiro. Obrigada! 🥨`;window.open('https://wa.me/'+(ph?(ph.length<=11?'55':'')+ph:'')+'?text='+encodeURIComponent(t),'_blank')}
+function wpp(){const v=S.sales.filter(s=>s.date==date),p=v.filter(s=>s.paid),made=S.days[date]?.made||0,qt=sum(v,s=>+s.qty);
+const t=`🥨 *Marmotas da Dona Selma*\n📅 ${label()}\n\nFeitas: ${made}\nVendidas: ${qt}\nSobraram: ${made-qt}\n\n💵 Dinheiro: ${R(sum(p.filter(s=>s.pay=='din'),s=>s.value))}\n📱 Pix: ${R(sum(p.filter(s=>s.pay=='pix'),s=>s.value))}\n⏳ A receber: ${R(sum(v.filter(s=>!s.paid),s=>s.value))}`;
+window.open('https://wa.me/?text='+encodeURIComponent(t),'_blank')}
+function dev(){const o={};S.sales.filter(s=>!s.paid).forEach(s=>{const k=s.client||'Sem nome';o[k]=(o[k]||0)+s.value});const e=Object.entries(o).sort((a,b)=>b[1]-a[1]);
+return `<div class="card"><b>⏳ Quem ainda deve</b>`+(e.length?e.map(([k,v])=>`<div style="display:flex;justify-content:space-between;margin-top:8px"><span>${esc(k)}</span><b class="neg">${R(v)}</b></div>`).join(''):'<div class="empty" style="padding:10px">Ninguém devendo 🎉</div>')+`</div>`}
+function bk(){const t=JSON.stringify(S);(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>alert('Backup copiado! Cole numa conversa ou nota para guardar.')).catch(()=>prompt('Copie o backup:',t))}
+function rs(){const t=prompt('Cole aqui o backup:');if(!t)return;try{const o=JSON.parse(t);if(!o.sales||!o.fin)throw 0;S=o;save();render();alert('Backup restaurado!')}catch(e){alert('Backup inválido.')}}
+const h=new Date().getHours();$('header small').textContent=(h<12?'Bom dia':h<18?'Boa tarde':'Boa noite')+', Dona Selma! Feitas com carinho e aquele gostinho de casa';
+render();
+setTimeout(()=>{const s=$('#sp');s.style.opacity=0;setTimeout(()=>s.remove(),500)},1100);
+let ip;addEventListener('beforeinstallprompt',e=>{e.preventDefault();ip=e;const b=$('#inst');b.style.display='block';b.onclick=()=>{ip.prompt();b.style.display='none'}});
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script></body></html>
